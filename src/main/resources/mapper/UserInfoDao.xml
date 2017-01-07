@@ -1,0 +1,22 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lab.io.rush.dao.UserInfoDao">
+    <!-- target:provide sql configuration for DAO interface -->
+    
+  <!--  userPhone,long userQQ,String userEmail,String userName -->
+<insert id="insertUserInfo">
+insert ignore into uesr_info(user_name,user_phone,user_email,user_qq)values
+(#{userName},#{userPhone},#{userEmail},#{userQQ});
+</insert>
+
+<select id="queryByUserId" resultType="UserInfo" parameterType="long">
+    <!-- query sql --> 
+    SELECT
+    	user_id,user_name,user_phone,user_email,user_qq
+    FROM
+      user_info
+    WHERE
+      user_id = #{userId};                
+</select>
+</mapper>

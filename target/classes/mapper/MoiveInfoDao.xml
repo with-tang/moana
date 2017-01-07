@@ -1,0 +1,32 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lab.io.rush.dao.MovieInfoDao">
+    <select id="queryByUserId" resultType="MovieInfo">
+        <!-- query sql --> 
+        SELECT
+          movie_id,movie_name,movie_price,movie_count,movie_start_time,movie_min
+        FROM
+          movie_info
+        WHERE
+          movie_id = #{movieId};
+                
+    </select>
+
+ <select id="queryById" resultType="MovieInfo" parameterType="long">
+        <!-- query sql --> 
+             SELECT
+          movie_id,movie_name,movie_price,movie_count,movie_start_time,movie_min
+        FROM
+          movie_info
+        WHERE
+          movie_id = #{movieId};
+                
+    </select>
+    <select id="queryAll" resultType="MovieInfo" parameterType="long">
+          SELECT
+        	  movie_id,movie_name,movie_price,movie_count,movie_start_time,movie_min
+      	  FROM
+          movie_info;      
+    </select>
+</mapper>

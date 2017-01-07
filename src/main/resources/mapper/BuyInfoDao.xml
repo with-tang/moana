@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lab.io.rush.dao.BuyInfoDao">
+    <!-- target:provide sql configuration for DAO interface -->
+        <insert id="insertBuyInfo">
+    	insert ignore into buyinfo(user_id,movie_id,movie_count,create_time)
+    	values(#{userId},#{movieId},#{movieCount},#{createTime});    
+    </insert>
+<!-- userId,long movieId,int moiveCount,Date createTime -->
+    <select id="queryById" resultType="BuyInfo">
+        <!-- query sql --> 
+        SELECT
+        user_id,movie_id,movie_count,create_time
+        FROM
+          buy_ifo
+        WHERE
+         user_id = #{userId}
+         and create_time=#{createTime};               
+    </select>
+    <!-- 执行抢购后的数据库操作，存储过程 ，先插入 购买明细，再减库存， -->
+       <select id="executeBuy" statementType="CALLABLE">
+    	call execute_buy(
+          #{userId, jdbcType=BIGINT, mode=IN},
+          #{movieId, jdbcType=BIGINT, mode=IN},
+          #{movieCount, jdbcType=BIGINT, mode=IN},
+            #{createTime, jdbcType=TIMESTAMP, mode=IN},
+          #{result, jdbcType=INTEGER, mode=OUT}
+        )
+    </select>
+    <!-- 
+    in v_user_id   bigint,
+in v_movie_id  bigint,
+in v_movie_count int,
+in v_create_time  timestamp,
+out r_result int)
+ -->
+</mapper>
