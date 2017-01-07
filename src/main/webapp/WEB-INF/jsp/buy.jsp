@@ -15,9 +15,7 @@
 //jquery判断是否登录，如果否，弹出注册页面
     $(function (){
         moana.detail.init({
-            seckillId :${seckill.secKillId},
-            startTime : ${seckill.start_time.time},
-            endTime : ${seckill.end_time.time}
+            movieId :${movie_list.secKillId};           
         });
     });
 </script>
