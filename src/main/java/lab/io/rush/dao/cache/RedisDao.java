@@ -6,7 +6,7 @@ import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-import lab.io.rush.model.UserInfo;
+import lab.io.rush.model.MovieInfo;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -14,7 +14,7 @@ public class RedisDao
 {
 	private  JedisPool jedisPool;
 	private final Logger logger=LoggerFactory.getLogger(this.getClass());
-	private RuntimeSchema<UserInfo> schema=RuntimeSchema.createFrom(UserInfo.class);
+	private RuntimeSchema<MovieInfo> schema=RuntimeSchema.createFrom(MovieInfo.class);
 	public RedisDao(String ip,int port)
 	{
 		jedisPool=new JedisPool(ip,port);	
@@ -22,25 +22,25 @@ public class RedisDao
 	//从缓存中取seckill
 	/**
 	 * 
-	 * @param secKillId
+	 * @param movieId
 	 * @return
 	 */
-	public UserInfo getSecKill(long secKillId)
+	public MovieInfo getMovieInfo(long movieId)
 	{
 		try
 		{
 			 Jedis jedis=jedisPool.getResource();
 			 try{
-				 String  key="secKill:";//+userInfo;
+				 String  key="movieInfo:";//+userInfo;
 				 //getByte[]->反序列化->object seckill
 				 //采用自定义序列化
 				 byte[] bytes=jedis.get(key.getBytes());
 				 if(bytes!=null)
 				 {					 
-					 UserInfo secKill=schema.newMessage();
-					 //反序列化，给secKill对象赋值
-					 ProtostuffIOUtil.mergeFrom(bytes, secKill, schema);
-					 return secKill;
+					 MovieInfo movieInfo=schema.newMessage();
+					 //反序列化，给movieinfo对象赋值
+					 ProtostuffIOUtil.mergeFrom(bytes, movieInfo, schema);
+					 return movieInfo;
 				 }
 			 }
 			 finally
@@ -54,11 +54,11 @@ public class RedisDao
 		return null;
 	}
 	/**
-	 * 往Redis中存seckill
-	 * @param secKill
+	 * 往Redis中存movieInfo
+	 * 
 	 * @return
 	 */
-	public String putSecKill(UserInfo userInfo)
+	public String putSecKill(MovieInfo movieInfo)
 	{
 		//object-> bytes->reids	
 				try
@@ -66,7 +66,7 @@ public class RedisDao
 					Jedis jedis=jedisPool.getResource();
 				try{
 					String key="secKill:";//+userInfo.getSecKillId();
-					byte[] bytes=ProtostuffIOUtil.toByteArray(userInfo,schema,
+					byte[] bytes=ProtostuffIOUtil.toByteArray(movieInfo,schema,
 						LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));	
 					//60分钟
 					int timeout=60 * 60;
